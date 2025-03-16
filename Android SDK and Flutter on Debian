@@ -1,74 +1,69 @@
-Here’s the complete and proper setup for Android SDK and Emulator on Debian:
+# Android SDK Command-Line Tools Setup on Ubuntu
 
----
+This guide shows you how to install the Android SDK and command-line tools on Ubuntu without using Android Studio.
 
-### **Step 1: Install Java**
-Make sure you have Java installed:
+## Prerequisites
+- Ubuntu or a Debian-based Linux distribution
+- Terminal access
+
+## Installation Steps
+
+### 1. Update Your Package List
 ```bash
 sudo apt update
-sudo apt install default-jre
 ```
 
-### **Step 2: Install Android SDK Manager**
-Install the SDK Manager:
+### 2. Install Required Dependencies
 ```bash
-sudo apt install sdkmanager
+sudo apt install unzip wget
 ```
 
-### **Step 3: Set Up Environment Variables**
-Set the `ANDROID_HOME` variable:
+### 3. Download Command-Line Tools
 ```bash
-export ANDROID_HOME=/opt/android-sdk
-export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$ANDROID_HOME/emulator
-```
-Make the directory and change ownership:
-```bash
-sudo mkdir -p $ANDROID_HOME
-sudo chown $USER $ANDROID_HOME
+wget https://dl.google.com/android/repository/commandlinetools-linux-10406996_latest.zip -O commandlinetools.zip
 ```
 
-### **Step 4: Install SDK Command Line Tools**
-Install essential components:
+### 4. Create SDK Directory
 ```bash
-sdkmanager "platform-tools" "emulator" "cmdline-tools;latest" "platforms;android-31"
+mkdir -p ~/Android/Sdk/cmdline-tools
 ```
 
-### **Step 5: Install System Image for Emulator**
-Install the Android 31 system image:
+### 5. Unzip Downloaded Tools
 ```bash
-sdkmanager "system-images;android-31;default;x86_64"
+unzip commandlinetools.zip -d ~/Android/Sdk/cmdline-tools
 ```
 
-### **Step 6: Create an AVD (Android Virtual Device)**
-Create a Nexus 5 emulator:
+### 6. Rename the Unzipped Folder
 ```bash
-$ANDROID_HOME/cmdline-tools/latest/bin/avdmanager create avd \
-  --name Nexus_5_API_31 \
-  --device "Nexus 5" \
-  --package "system-images;android-31;default;x86_64" \
-  --tag default \
-  --sdcard 64M
+mv ~/Android/Sdk/cmdline-tools/cmdline-tools ~/Android/Sdk/cmdline-tools/latest
 ```
 
-### **Step 7: Start the Emulator**
-Launch the emulator:
+### 7. Add Tools to PATH
+Edit your .bashrc file:
 ```bash
-$ANDROID_HOME/emulator/emulator @Nexus_5_API_31
+nano ~/.bashrc
 ```
-
----
-
-### **Step 8: Make Environment Variables Persistent**
-Add these lines to your `~/.bashrc` or `~/.profile`:
-```bash
-export ANDROID_HOME=/opt/android-sdk
-export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$ANDROID_HOME/emulator
+Add the following lines at the end:
 ```
-Reload the file:
+export ANDROID_SDK_ROOT=$HOME/Android/Sdk
+export PATH=$PATH:$ANDROID_SDK_ROOT/cmdline-tools/latest/bin
+export PATH=$PATH:$ANDROID_SDK_ROOT/platform-tools
+```
+Apply the changes:
 ```bash
 source ~/.bashrc
 ```
 
----
+### 8. Verify Installation
+```bash
+sdkmanager --version
+```
 
-Now your Android emulator setup should work flawlessly! Let me know if you need more help with this or Flutter integration. 💪
+### 9. Install Essential SDK Packages
+```bash
+sdkmanager "platform-tools" "platforms;android-30" "build-tools;30.0.3"
+```
+
+## Done!
+You’re now ready to use the Android SDK command-line tools. Happy coding!
+
